@@ -1,0 +1,167 @@
+<html>
+<script>
+
+//initializing the array for the tasks
+let tasks = [
+  {
+    "item": "",
+    "count": 0,
+    
+  }
+];
+
+//function to add the the task to the list
+function add_task(i) {
+
+let task = {
+    "item": document.getElementById("item"+i).value,
+    "count": document.getElementById("count"+i).value,
+   
+
+  }
+
+  //pushes the task to the list
+tasks.push(task);
+
+
+//calling the reprint function to reprint the screen after adding the task
+reprint();
+}
+
+function ship_task(i){
+   var num; 
+   let text; 
+   let ship = prompt("Please enter how many items you would like to ship",0);
+   if (ship == null || ship == ""){
+      text = "User cancelled the prompt";
+   } else{
+      num = ship; 
+      //alert(num);
+      var currCount = document.getElementById('count' + i).value; 
+      
+      if (num <= currCount){
+        document.getElementById('count' + i).value = document.getElementById('count' + i).value - num; 
+      }else{
+        alert("Not enough items to ship")
+      }
+     // tasks[i-1].count = num;
+
+   }
+  
+   //tasks[i-1].count = document.getElementById("num" + i).num; 
+}
+
+//deleting the task
+function delete_task(i){
+  //function to delete the task
+  tasks.splice(i-1,1);
+  //reprinting the screen after deletion
+  reprint(); 
+
+}
+
+//moving the task down
+function move_down(i){
+  //swap type of method to swap the places downwards
+  const tmp = tasks[i].item;
+  tasks[i].item = tasks[i-1].item
+  tasks[i-1].item = tmp; 
+
+  const tmp2 = tasks[i].count;
+  tasks[i].count = tasks[i-1].count
+  tasks[i-1].count = tmp2; 
+
+  
+
+  //edge case if task is the last task and cannot be moved down
+  if(i == tasks.length){
+    return;
+  }
+  reprint(); 
+}
+
+//moving the task up
+function move_up(i){
+  //edge case if task is first task and cannot be moved up
+  if(i == 2){
+    return; 
+  }
+  //swap method to swap the places upwards
+  const tmp = tasks[i-2].item
+  tasks[i-2].item = tasks[i-1].item
+  tasks[i-1].item = tmp; 
+  
+  const tmp2 = tasks[i-2].count;
+  tasks[i-2].count = tasks[i-1].count
+  tasks[i-1].count = tmp2; 
+
+  
+  reprint(); 
+}
+
+//edit the task 
+function edit_task(i){
+  //alerts user to enter their new value
+  alert("please enter your new value")
+  //saves the edited value into the task
+  tasks[i-1].item = document.getElementById("item"+ i).value;
+  tasks[i-1].count = document.getElementById("count" + i).value; 
+  
+
+  reprint();
+}
+
+//reprint function
+function reprint() {
+
+var i = 0;
+
+document.getElementById("tid").innerHTML = "";
+
+tasks.forEach(function (task) {
+
+i = i+1;
+
+// if there is nothing in the task, only add in the 'Add' button
+if (task.item == "") {
+document.getElementById("tid").innerHTML += `
+<input id=item${i} value="">
+<input id=count${i} value = 0>
+<button id="add${i}" onclick="add_task(${i})">Add</button>
+<br>
+`;
+//if there is something entered in the task do the following
+} else{
+  //used to store and save the status that the user selected
+  
+  
+  //all the elements of the inputed task and the drop down menu plus the 
+  //Edit and Delete button
+document.getElementById("tid").innerHTML += `
+<input id=item${i} value=\"${task.item}\">
+<input id=count${i} value=\"${task.count}\">
+<button id="edit${i}" onclick="edit_task(${i})">Edit</button>
+<button id="delete${i}" onclick="delete_task(${i})">Delete</button>
+<button id="up${i}" onclick="move_up(${i})">UP</button>
+<button id="down${i}" onclick="move_down(${i})">DOWN</button>
+<button id = "ship${i}" onclick="ship_task(${i})">Ship</button>
+<br>
+`;
+
+
+}
+});
+
+}
+</script>
+
+</head>
+<body onload="reprint()">
+<h3>Inventory</h3>
+<p>Enter your inventory item below</p>
+<p>&emsp; &emsp;&emsp; Item&emsp; &emsp; &emsp; &emsp; &emsp; &ensp;Inventory&emsp; &emsp; &emsp; &ensp;</p>
+<p id="tid">
+</p>
+</body>
+</html>
+
